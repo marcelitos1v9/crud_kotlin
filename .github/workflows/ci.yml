@@ -26,5 +26,8 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
+
     - name: Build and run tests
       run: ./gradlew build check --no-daemon
