@@ -13,7 +13,7 @@ Servidor REST desenvolvido em Kotlin Multiplatform utilizando o framework **Ktor
 
 ## 🚀 Como Configurar e Executar Localmente
 
-### 0. Recriar o Banco de Dados (Professor/Avaliador)
+### 0. Recriar o Banco de Dados 
 Se desejar recriar a base de dados do zero em outro projeto Supabase:
 Copie o conteúdo do arquivo **`database_schema.sql`** (incluso neste repositório) e rode no "SQL Editor" do painel do Supabase. Ele já possui as tabelas (`products` e `stock_items` com `ON DELETE CASCADE`) e a View (`stock_summary`), suprindo o entregável "Export do schema".
 
@@ -29,9 +29,12 @@ Crie um arquivo chamado **`local.properties`** na raiz do projeto (na mesma past
 ```properties
 SUPABASE_URL=https://sua-url-do-projeto.supabase.co
 SUPABASE_KEY=sua-chave-anon-public-key
+
+# Opcional: Se você utilizar o Android Studio e precisar fixar o caminho do JDK, adicione aqui (use barras duplas ou invertidas dependendo do SO):
+# org.gradle.java.home=C\:\\Program Files\\Android\\Android Studio\\jbr
 ```
 
-> **Aviso:** Nunca versione o arquivo `local.properties`. O Supabase precisa apenas da chave pública (`anon public`) por usar RLS (Row Level Security), por este motivo mantemos via Variável de Ambiente. 
+> **Aviso:** Nunca versione o arquivo `local.properties` (já incluso no `.gitignore`). O Supabase precisa apenas da chave pública (`anon public`) e deve ser mantido localmente. Colocar configurações locais como `org.gradle.java.home` neste arquivo garante que variáveis específicas da sua máquina não quebrem o pipeline do GitHub Actions (CI).
 
 ### 3. Rodar o Servidor
 Abra o projeto no Android Studio/IntelliJ e rode a função `main()` no arquivo `Application.kt` no módulo `server`.
@@ -70,3 +73,7 @@ Para testar todos os endpoints de forma fácil, exportamos uma coleção pronta 
 1. Baixe o software [Insomnia](https://insomnia.rest/download).
 2. Clique em *Import* e selecione o arquivo **`insomnia_collection.json`** presente na raiz deste repositório.
 3. Isso já contém todas as rotas e a variável Root `base_url` configurada automática para o localhost!
+
+## ⚙️ Integração Contínua (CI)
+Este projeto conta com um workflow configurado com o GitHub Actions (`.github/workflows/ci.yml`). Sempre que novos `push` ou `pull_request` ocorrerem nas branches principais (`main`/`master`), uma máquina automatizada Linux montará e verificará o projeto (`./gradlew build check`) utilizando o JDK 17. 
+Isso garante a saúde do código testando imediatamente incompatibilidades antes delas afetarem o sistema.
